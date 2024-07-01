@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Word Enter</title>
+        <style>
+            body{ font-family: Arial, sans-serif;}
+            .container{max-width: 500px; margin: 0 auto; padding: 20px;}
+            input, button { width: 100%; padding: 10px; margin-top: 10px;}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+        <h1>Word Saver</h1>
+        <input type="text" id="wordInput" placeHolder="Enter a word">
+        <button onlick = "saveWord()">save</button>
+        <button onlick = "viewWords()">view</button>
+        <div id="output"></div>
+        </div>
+        <script>
+            async function saveWord(){
+                const word = document.getElementById('wordInput').value;
+                const response = await fetch('api/save',{
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({word})
+                });
+                const result = await response.json();
+                document.getElementById('output').innerText = result.message;
+            }
+
+            async function viewWords(){
+                const response = await fetch('api/view');
+                const words = await response.json();
+                document.getElementById('output').innerText = words.join(',');
+            }
+        </script>
+    </body>
+</html>
